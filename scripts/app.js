@@ -33,32 +33,32 @@ const container = document.createElement('div');
 container.classList.add('container');
 body.appendChild(container);
 
-const hangmanBox = document.createElement('div');
-hangmanBox.classList.add('.hangman-box');
-container.appendChild(hangmanBox);
+const box1 = document.createElement('div');
+box1.classList.add('.container_part1');
+container.appendChild(box1);
 
 const hangmanImage = document.createElement('img');
-hangmanBox.appendChild(hangmanImage);
+box1.appendChild(hangmanImage);
 hangmanImage.setAttribute("alt", "hangman-image");
 
 const boxheader = document.createElement('h1');
-hangmanBox.appendChild(boxheader);
+box1.appendChild(boxheader);
 boxheader.innerText = 'Hangman Game';
 boxheader.setAttribute("alt", "image");
 
 // Create Game Box
 
-const gameBox = document.createElement('div');
-gameBox.classList.add('game-box');
-container.appendChild(gameBox);
+const box2 = document.createElement('div');
+box2.classList.add('container_part2');
+container.appendChild(box2);
 
-const wordDisplay = document.createElement('div');
-wordDisplay.classList.add('word-display');
-gameBox.appendChild(wordDisplay);
+const unorderList = document.createElement('div');
+unorderList.classList.add('unorder_list');
+box2.appendChild(unorderList);
 
 const hintH4 = document.createElement('h4');
 hintH4.classList.add('hint-text');
-gameBox.appendChild(hintH4);
+box2.appendChild(hintH4);
 hintH4.innerText = 'Hint: ';
 
 const hintBold = document.createElement('b');
@@ -67,14 +67,14 @@ hintH4.appendChild(hintBold);
 const guessesText = document.createElement('h4');
 guessesText.classList.add('guesses-text');
 guessesText.innerText = 'Incorrect guesses: ';
-gameBox.appendChild(guessesText);
+box2.appendChild(guessesText);
 
 const guessBold = document.createElement('b');
 guessesText.appendChild(guessBold);
 
 const keyboardDiv = document.createElement('div');
 keyboardDiv.classList.add('keyboard');
-gameBox.appendChild(keyboardDiv)
+box2.appendChild(keyboardDiv)
 
 
 let currentWord, correctLetters, wrongLetterCounter;
@@ -85,7 +85,7 @@ const reset = () => {
     wrongLetterCounter = 0;
     hangmanImage.src = "./assets/hangman-0.svg";
     guessBold.innerText = `${wrongLetterCounter} / ${maxGuesses}`;
-    wordDisplay.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
+    unorderList.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
     keyboardDiv.querySelectorAll("button").forEach(btn => btn.disabled = false);
     modal.classList.remove("show");
 }
@@ -111,8 +111,8 @@ const initializeGame = (button, clickedLetter) => {
             [...currentWord].forEach((letter, index) => {
                 if(letter === clickedLetter) {
                     correctLetters.push(letter);
-                    wordDisplay.querySelectorAll("li")[index].innerText = letter;
-                    wordDisplay.querySelectorAll("li")[index].classList.add("guessed");
+                    unorderList.querySelectorAll("li")[index].innerText = letter;
+                    unorderList.querySelectorAll("li")[index].classList.add("guessed");
                 }
             });
         } else {
@@ -128,8 +128,8 @@ const initializeGame = (button, clickedLetter) => {
             [...currentWord].forEach((letter, index) => {
                 if(letter === clickedLetter.toLowerCase()) {
                     correctLetters.push(letter);
-                    wordDisplay.querySelectorAll("li")[index].innerText = letter;
-                    wordDisplay.querySelectorAll("li")[index].classList.add("guessed");
+                    unorderList.querySelectorAll("li")[index].innerText = letter;
+                    unorderList.querySelectorAll("li")[index].classList.add("guessed");
                 }
             });
         } else {
