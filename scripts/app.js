@@ -77,14 +77,14 @@ keyboardDiv.classList.add('keyboard');
 gameBox.appendChild(keyboardDiv)
 
 
-let currentWord, correctLetters, wrongGuessCount;
+let currentWord, correctLetters, wrongLetterCounter;
 const maxGuesses = 6;
 
-const resetGame = () => {
+const reset = () => {
     correctLetters = [];
-    wrongGuessCount = 0;
+    wrongLetterCounter = 0;
     hangmanImage.src = "./assets/hangman-0.svg";
-    guessBold.innerText = `${wrongGuessCount} / ${maxGuesses}`;
+    guessBold.innerText = `${wrongLetterCounter} / ${maxGuesses}`;
     wordDisplay.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
     keyboardDiv.querySelectorAll("button").forEach(btn => btn.disabled = false);
     modal.classList.remove("show");
@@ -94,18 +94,18 @@ const getRandomWord = () => {
     const { word, hint } = test[Math.floor(Math.random() * test.length)];
     currentWord = word; 
     hintBold.innerText = hint;
-    resetGame();
+    reset();
 }
 
-const gameOver = (isVictory) => {
-    const modalText = isVictory ? `You found the word:` : 'The correct word was:';
-    modal.querySelector("img").src = `./assets/${isVictory ? 'victory' : 'lost'}.gif`;
-    modal.querySelector("h4").innerText = isVictory ? 'Congrats!' : 'Game Over!';
+const defeat = (isWin) => {
+    const modalText = isWin ? `You found the word:` : 'The correct word was:';
+    modal.querySelector("img").src = `./assets/${isWin ? 'victory' : 'lost'}.gif`;
+    modal.querySelector("h4").innerText = isWin ? 'Congrats!' : 'Game Over!';
     modal.querySelector("p").innerHTML = `${modalText} <b>${currentWord}</b>`;
     modal.classList.add("show");
 }
 
-const initGame = (button, clickedLetter) => {
+const initializeGame = (button, clickedLetter) => {
     if (button) {
         if(currentWord.includes(clickedLetter)) {
             [...currentWord].forEach((letter, index) => {
@@ -116,13 +116,13 @@ const initGame = (button, clickedLetter) => {
                 }
             });
         } else {
-            wrongGuessCount++;
-            hangmanImage.src = `./assets/hangman-${wrongGuessCount}.svg`;
+            wrongLetterCounter++;
+            hangmanImage.src = `./assets/hangman-${wrongLetterCounter}.svg`;
         }
-        guessBold.innerText = `${wrongGuessCount} / ${maxGuesses}`;
+        guessBold.innerText = `${wrongLetterCounter} / ${maxGuesses}`;
     
-        if(wrongGuessCount === maxGuesses) return gameOver(false);
-        if(correctLetters.length === currentWord.length) return gameOver(true);
+        if(wrongLetterCounter === maxGuesses) return defeat(false);
+        if(correctLetters.length === currentWord.length) return defeat(true);
     }else {
         if(currentWord.includes(clickedLetter.toLowerCase())) {
             [...currentWord].forEach((letter, index) => {
@@ -133,12 +133,12 @@ const initGame = (button, clickedLetter) => {
                 }
             });
         } else {
-            wrongGuessCount++;
-            hangmanImage.src = `./assets/hangman-${wrongGuessCount}.svg`;
+            wrongLetterCounter++;
+            hangmanImage.src = `./assets/hangman-${wrongLetterCounter}.svg`;
         }
-        if(wrongGuessCount === maxGuesses) return gameOver(false);
-        if(correctLetters.length === currentWord.length) return gameOver(true);
-        guessBold.innerText = `${wrongGuessCount} / ${maxGuesses}`;
+        if(wrongLetterCounter === maxGuesses) return defeat(false);
+        if(correctLetters.length === currentWord.length) return defeat(true);
+        guessBold.innerText = `${wrongLetterCounter} / ${maxGuesses}`;
     }
 }
 
@@ -147,14 +147,14 @@ for (let i = 97; i <= 122; i++) {
     button.innerText = String.fromCharCode(i);
     keyboardDiv.appendChild(button);
     button.addEventListener("click", (e) => {
-        initGame(e.target, String.fromCharCode(i))
+        initializeGame(e.target, String.fromCharCode(i))
         button.disabled = true;
     });
 }
 
 document.addEventListener('keydown', (e) => {
     if(e.keyCode >= 65 && e.keyCode <=90) {
-        initGame(null, String.fromCharCode(e.keyCode));
+        initializeGame(null, String.fromCharCode(e.keyCode));
     } 
 });
 
