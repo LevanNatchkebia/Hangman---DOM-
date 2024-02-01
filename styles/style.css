@@ -25,7 +25,7 @@ body {
     justify-content: space-between;
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
-.container_part1 img {
+.hangman-box img {
     user-select: none;
     max-width: 270px;
 }
@@ -36,7 +36,7 @@ h1 {
     font-weight: 700;
     text-transform: uppercase;
 }
-.container_part2 .unorder_list {
+.game-box .word-display {
     gap: 10px;
     list-style: none;
     display: flex;
@@ -44,7 +44,7 @@ h1 {
     justify-content: center;
     align-items: center;
 }
-.unorder_list .letter {
+.word-display .letter {
     width: 28px;
     font-size: 2rem;
     text-align: center;
@@ -53,23 +53,23 @@ h1 {
     text-transform: uppercase;
     border-bottom: 3px solid #000;
 }
-.unorder_list .letter.guessed {
+.word-display .letter.guessed {
     margin: -40px 0 35px;
     border-color: transparent;
 }
-.container_part2 h4 {
+.game-box h4 {
     text-align: center;
     font-size: 1.1rem;
     font-weight: 500;
     margin-bottom: 15px;
 }
-.container_part2 h4 b {
+.game-box h4 b {
     font-weight: 600;
 }
-.container_part2 .guesses-text b {
+.game-box .guesses-text b {
     color: #ff0000;
 }
-.container_part2 .keyboard {
+.game-box .keyboard {
     display: flex;
     gap: 5px;
     flex-wrap: wrap;
@@ -157,20 +157,20 @@ h1 {
         padding: 30px 15px;
         align-items: center;
     }
-    .container_part1 img {
+    .hangman-box img {
         max-width: 200px;
     }
-    .container_part1 h1 {
+    .hangman-box h1 {
         display: none;
     }
-    .container_part2 h4 {
+    .game-box h4 {
         font-size: 1rem;
     }
-    .unorder_list .letter {
+    .word-display .letter {
         margin-bottom: 35px;
         font-size: 1.7rem;
     }
-    .unorder_list .letter.guessed {
+    .word-display .letter.guessed {
         margin: -35px 0 25px;
     }
     .modal img {
