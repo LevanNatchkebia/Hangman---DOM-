@@ -254,9 +254,5 @@ const test = [
     {
         word: "nostalgia",
         hint: "A sentimental longing or wistful affection for the past."
-    },
-    {
-        word: "brilliant",
-        hint: "Exceptionally clever, talented, or impressive."
-    },
+    }
 ]
