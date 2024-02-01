@@ -33,32 +33,32 @@ const container = document.createElement('div');
 container.classList.add('container');
 body.appendChild(container);
 
-const box1 = document.createElement('div');
-box1.classList.add('.container_part1');
-container.appendChild(box1);
+const hangmanBox = document.createElement('div');
+hangmanBox.classList.add('.hangman-box');
+container.appendChild(hangmanBox);
 
 const hangmanImage = document.createElement('img');
-box1.appendChild(hangmanImage);
+hangmanBox.appendChild(hangmanImage);
 hangmanImage.setAttribute("alt", "hangman-image");
 
 const boxheader = document.createElement('h1');
-box1.appendChild(boxheader);
+hangmanBox.appendChild(boxheader);
 boxheader.innerText = 'Hangman Game';
 boxheader.setAttribute("alt", "image");
 
 // Create Game Box
 
-const box2 = document.createElement('div');
-box2.classList.add('container_part2');
-container.appendChild(box2);
+const gameBox = document.createElement('div');
+gameBox.classList.add('game-box');
+container.appendChild(gameBox);
 
-const unorderList = document.createElement('div');
-unorderList.classList.add('unorder_list');
-box2.appendChild(unorderList);
+const wordDisplay = document.createElement('div');
+wordDisplay.classList.add('word-display');
+gameBox.appendChild(wordDisplay);
 
 const hintH4 = document.createElement('h4');
 hintH4.classList.add('hint-text');
-box2.appendChild(hintH4);
+gameBox.appendChild(hintH4);
 hintH4.innerText = 'Hint: ';
 
 const hintBold = document.createElement('b');
@@ -67,14 +67,14 @@ hintH4.appendChild(hintBold);
 const guessesText = document.createElement('h4');
 guessesText.classList.add('guesses-text');
 guessesText.innerText = 'Incorrect guesses: ';
-box2.appendChild(guessesText);
+gameBox.appendChild(guessesText);
 
 const guessBold = document.createElement('b');
 guessesText.appendChild(guessBold);
 
 const keyboardDiv = document.createElement('div');
 keyboardDiv.classList.add('keyboard');
-box2.appendChild(keyboardDiv)
+gameBox.appendChild(keyboardDiv)
 
 
 let currentWord, correctLetters, wrongLetterCounter;
@@ -85,7 +85,7 @@ const reset = () => {
     wrongLetterCounter = 0;
     hangmanImage.src = "./assets/hangman-0.svg";
     guessBold.innerText = `${wrongLetterCounter} / ${maxGuesses}`;
-    unorderList.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
+    wordDisplay.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
     keyboardDiv.querySelectorAll("button").forEach(btn => btn.disabled = false);
     modal.classList.remove("show");
 }
@@ -107,38 +107,34 @@ const defeat = (isWin) => {
 
 const initializeGame = (button, clickedLetter) => {
     if (button) {
-        if(currentWord.includes(clickedLetter)) {
+        console.log(clickedLetter);
+        if(currentWord.includes(clickedLetter) && !button.disabled) {
             [...currentWord].forEach((letter, index) => {
                 if(letter === clickedLetter) {
                     correctLetters.push(letter);
-                    unorderList.querySelectorAll("li")[index].innerText = letter;
-                    unorderList.querySelectorAll("li")[index].classList.add("guessed");
+                    wordDisplay.querySelectorAll("li")[index].innerText = letter;
+                    wordDisplay.querySelectorAll("li")[index].classList.add("guessed");
                 }
             });
         } else {
-            wrongLetterCounter++;
-            hangmanImage.src = `./assets/hangman-${wrongLetterCounter}.svg`;
+            if(!button.disabled) {
+                wrongLetterCounter++;
+                hangmanImage.src = `./assets/hangman-${wrongLetterCounter}.svg`;
+            }
         }
         guessBold.innerText = `${wrongLetterCounter} / ${maxGuesses}`;
+
+        button.disabled = true;
     
         if(wrongLetterCounter === maxGuesses) return defeat(false);
         if(correctLetters.length === currentWord.length) return defeat(true);
-    }else {
-        if(currentWord.includes(clickedLetter.toLowerCase())) {
-            [...currentWord].forEach((letter, index) => {
-                if(letter === clickedLetter.toLowerCase()) {
-                    correctLetters.push(letter);
-                    unorderList.querySelectorAll("li")[index].innerText = letter;
-                    unorderList.querySelectorAll("li")[index].classList.add("guessed");
-                }
-            });
-        } else {
-            wrongLetterCounter++;
-            hangmanImage.src = `./assets/hangman-${wrongLetterCounter}.svg`;
-        }
-        if(wrongLetterCounter === maxGuesses) return defeat(false);
-        if(correctLetters.length === currentWord.length) return defeat(true);
-        guessBold.innerText = `${wrongLetterCounter} / ${maxGuesses}`;
+    } else {
+        const buttons = document.querySelectorAll('.keyboard button');
+        buttons.forEach((button) => {
+            if(button.innerText === clickedLetter) {
+                return initializeGame(button, clickedLetter.toLowerCase());
+            }
+        });
     }
 }
 
@@ -150,13 +146,18 @@ for (let i = 97; i <= 122; i++) {
         initializeGame(e.target, String.fromCharCode(i))
         button.disabled = true;
     });
+    if (wrongLetterCounter === maxGuesses) {
+        document.removeEventListener('keydown');
+    }
 }
 
 document.addEventListener('keydown', (e) => {
     if(e.keyCode >= 65 && e.keyCode <=90) {
         initializeGame(null, String.fromCharCode(e.keyCode));
-    } 
+    }
 });
+
+
 
 getRandomWord();
 playAgainBtn.addEventListener("click", getRandomWord);
