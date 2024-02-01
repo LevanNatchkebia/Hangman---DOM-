@@ -107,7 +107,6 @@ const defeat = (isWin) => {
 
 const initializeGame = (button, clickedLetter) => {
     if (button) {
-        console.log(clickedLetter);
         if(currentWord.includes(clickedLetter) && !button.disabled) {
             [...currentWord].forEach((letter, index) => {
                 if(letter === clickedLetter) {
